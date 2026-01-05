@@ -1,0 +1,87 @@
+{
+  "MRData": {
+    "xmlns": "http://ergast.com/mrd/1.5",
+    "series": "f1",
+    "url": "http://ergast.com/api/f1/2024/1/driverStandings.json",
+    "StandingsTable": {
+      "season": "2024",
+      "round": "1",
+      "StandingsLists": [{
+        "season": "2024",
+        "round": "1",
+        "DriverStandings": [
+          {
+            "position": "1",
+            "positionText": "1",
+            "points": "25",
+            "wins": "1",
+            "Driver": {
+              "driverId": "max_verstappen",
+              "code": "VER",
+              "givenName": "Max",
+              "familyName": "Verstappen",
+              "nationality": "Dutch"
+            },
+            "Constructors": [{"constructorId": "red_bull", "name": "Red Bull", "nationality": "Austrian"}]
+          },
+          {
+            "position": "2",
+            "positionText": "2",
+            "points": "18",
+            "wins": "0",
+            "Driver": {
+              "driverId": "perez",
+              "code": "PER",
+              "givenName": "Sergio",
+              "familyName": "Pérez",
+              "nationality": "Mexican"
+            },
+            "Constructors": [{"constructorId": "red_bull", "name": "Red Bull", "nationality": "Austrian"}]
+          },
+          {
+            "position": "3",
+            "positionText": "3",
+            "points": "15",
+            "wins": "0",
+            "Driver": {
+              "driverId": "sainz",
+              "code": "SAI",
+              "givenName": "Carlos",
+              "familyName": "Sainz",
+              "nationality": "Spanish"
+            },
+            "Constructors": [{"constructorId": "ferrari", "name": "Ferrari", "nationality": "Italian"}]
+          },
+          {
+            "position": "4",
+            "positionText": "4",
+            "points": "12",
+            "wins": "0",
+            "Driver": {
+              "driverId": "leclerc",
+              "code": "LEC",
+              "givenName": "Charles",
+              "familyName": "Leclerc",
+              "nationality": "Monegasque"
+            },
+            "Constructors": [{"constructorId": "ferrari", "name": "Ferrari", "nationality": "Italian"}]
+          },
+          {
+            "position": "5",
+            "positionText": "5",
+            "points": "10",
+            "wins": "0",
+            "Driver": {
+              "driverId": "norris",
+              "code": "NOR",
+              "givenName": "Lando",
+              "familyName": "Norris",
+              "nationality": "British"
+            },
+            "Constructors": [{"constructorId": "mclaren", "name": "McLaren", "nationality": "British"}]
+          }
+        ]
+      }]
+    }
+  }
+}

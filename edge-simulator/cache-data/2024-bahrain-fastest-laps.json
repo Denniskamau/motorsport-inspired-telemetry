@@ -1,0 +1,53 @@
+{
+  "MRData": {
+    "xmlns": "http://ergast.com/mrd/1.5",
+    "series": "f1",
+    "url": "http://ergast.com/api/f1/2024/1/fastest/1.json",
+    "RaceTable": {
+      "season": "2024",
+      "round": "1",
+      "Races": [{
+        "raceName": "Bahrain Grand Prix",
+        "date": "2024-03-02",
+        "FastestLaps": [
+          {
+            "rank": "1",
+            "lap": "56",
+            "Driver": {
+              "driverId": "max_verstappen",
+              "code": "VER",
+              "givenName": "Max",
+              "familyName": "Verstappen"
+            },
+            "Time": {"time": "1:31.447"},
+            "AverageSpeed": {"units": "kph", "speed": "203.456"}
+          },
+          {
+            "rank": "2",
+            "lap": "55",
+            "Driver": {
+              "driverId": "perez",
+              "code": "PER",
+              "givenName": "Sergio",
+              "familyName": "Pérez"
+            },
+            "Time": {"time": "1:31.789"},
+            "AverageSpeed": {"units": "kph", "speed": "202.987"}
+          },
+          {
+            "rank": "3",
+            "lap": "54",
+            "Driver": {
+              "driverId": "leclerc",
+              "code": "LEC",
+              "givenName": "Charles",
+              "familyName": "Leclerc"
+            },
+            "Time": {"time": "1:32.012"},
+            "AverageSpeed": {"units": "kph", "speed": "202.543"}
+          }
+        ]
+      }]
+    }
+  }
+}

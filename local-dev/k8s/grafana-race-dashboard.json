@@ -1,0 +1,367 @@
+{
+  "title": "🏎️ F1 Race Control - 2024 Bahrain GP",
+  "tags": ["f1", "telemetry", "race", "motorsport", "bahrain"],
+  "timezone": "utc",
+  "schema Version": 38,
+  "version": 2,
+  "refresh": "5s",
+  "editable": true,
+  "panels": [
+    {
+      "id": 1,
+      "title": "🏁 Race Results - Top 5",
+      "type": "table",
+      "gridPos": {"x": 0, "y": 0, "w": 12, "h": 6},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total{data_type=\"race_results\"}[5m]))",
+        "legendFormat": "Race Data Updates",
+        "format": "table"
+      }],
+      "options": {
+        "showHeader": true,
+        "sortBy": [{"displayName": "Position"}]
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {"align": "left"},
+          "mappings": [],
+          "color": {"mode": "thresholds"}
+        }
+      },
+      "transformations": []
+    },
+    {
+      "id": 2,
+      "title": "👤 Driver Championship Standings",
+      "type": "table",
+      "gridPos": {"x": 12, "y": 0, "w": 12, "h": 6},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total{data_type=\"driver_standings\"}[5m]))",
+        "legendFormat": "Standings Updates",
+        "format": "table"
+      }],
+      "options": {
+        "showHeader": true
+      }
+    },
+    {
+      "id": 3,
+      "title": "⛽ Pit Stop Duration - All Drivers",
+      "type": "bargauge",
+      "gridPos": {"x": 0, "y": 6, "w": 8, "h": 6},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total{data_type=\"pit_stops\"}[5m]))",
+        "legendFormat": "Pit Stops Count"
+      }],
+      "options": {
+        "orientation": "horizontal",
+        "displayMode": "gradient",
+        "showUnfilled": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": 0, "color": "green"},
+              {"value": 2.5, "color": "yellow"},
+              {"value": 3.0, "color": "red"}
+            ]
+          },
+          "max": 4
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "🔄 Pit Stop Strategy - Lap Timeline",
+      "type": "graph",
+      "gridPos": {"x": 8, "y": 6, "w": 16, "h": 6},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total{data_type=\"pit_stops\"}[1m]))",
+        "legendFormat": "Pit Stops per Minute"
+      }],
+      "yaxes": [
+        {"format": "short", "label": "Pit Stops"}
+      ],
+      "xaxis": {
+        "mode": "time"
+      },
+      "lines": true,
+      "points": true,
+      "pointradius": 5
+    },
+    {
+      "id": 5,
+      "title": "⏱️ Fastest Laps - Top 5",
+      "type": "stat",
+      "gridPos": {"x": 0, "y": 12, "w": 8, "h": 5},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total{data_type=\"fastest_laps\"}[5m]))",
+        "legendFormat": "Fastest Lap Updates"
+      }],
+      "options": {
+        "graphMode": "area",
+        "colorMode": "value",
+        "textMode": "value_and_name"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": 0, "color": "green"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "🏁 Qualifying Results - Grid Position",
+      "type": "bargauge",
+      "gridPos": {"x": 8, "y": 12, "w": 8, "h": 5},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total{data_type=\"qualifying\"}[5m]))",
+        "legendFormat": "Qualifying Updates"
+      }],
+      "options": {
+        "orientation": "vertical",
+        "displayMode": "lcd"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": 0, "color": "green"},
+              {"value": 1, "color": "yellow"},
+              {"value": 2, "color": "red"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "🏆 Constructor Championship",
+      "type": "piechart",
+      "gridPos": {"x": 16, "y": 12, "w": 8, "h": 5},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total{data_type=\"constructor_standings\"}[5m]))",
+        "legendFormat": "Constructor Updates"
+      }],
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": ["value", "percent"]
+        },
+        "pieType": "donut"
+      }
+    },
+    {
+      "id": 8,
+      "title": "📈 Lap Time Progression - Race Leaders",
+      "type": "graph",
+      "gridPos": {"x": 0, "y": 17, "w": 16, "h": 7},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total{data_type=\"lap_times\"}[1m]))",
+        "legendFormat": "Lap Data Updates per Minute"
+      }],
+      "yaxes": [
+        {"format": "s", "label": "Lap Time (seconds)"}
+      ],
+      "xaxis": {
+        "mode": "series",
+        "name": "Lap Number"
+      },
+      "legend": {
+        "show": true,
+        "alignAsTable": true,
+        "rightSide": false,
+        "values": true,
+        "current": true,
+        "avg": true,
+        "min": true
+      },
+      "tooltip": {
+        "shared": true,
+        "sort": 0
+      }
+    },
+    {
+      "id": 9,
+      "title": "⚡ Telemetry Ingestion Rate by Type",
+      "type": "graph",
+      "gridPos": {"x": 16, "y": 17, "w": 8, "h": 7},
+      "targets": [
+        {
+          "expr": "sum(rate(telemetry_requests_total{status=\"success\"}[1m])) by (data_type)",
+          "legendFormat": "{{data_type}}"
+        }
+      ],
+      "yaxes": [
+        {"format": "reqps", "label": "Requests/sec"}
+      ],
+      "stack": true,
+      "legend": {
+        "show": true,
+        "alignAsTable": false
+      }
+    },
+    {
+      "id": 10,
+      "title": "📊 Telemetry Data Volume - Last Hour",
+      "type": "stat",
+      "gridPos": {"x": 0, "y": 24, "w": 6, "h": 4},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total[1h]))",
+        "legendFormat": "Total Telemetry Events"
+      }],
+      "options": {
+        "graphMode": "area",
+        "colorMode": "background"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": 0, "color": "blue"},
+              {"value": 100, "color": "green"},
+              {"value": 500, "color": "yellow"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 11,
+      "title": "✅ Telemetry Success Rate",
+      "type": "gauge",
+      "gridPos": {"x": 6, "y": 24, "w": 6, "h": 4},
+      "targets": [{
+        "expr": "sum(rate(telemetry_requests_total{status=\"success\"}[5m])) / sum(rate(telemetry_requests_total[5m])) * 100",
+        "legendFormat": "Success %"
+      }],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": 0, "color": "red"},
+              {"value": 90, "color": "yellow"},
+              {"value": 99, "color": "green"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 12,
+      "title": "🔄 Data Types Distribution",
+      "type": "piechart",
+      "gridPos": {"x": 12, "y": 24, "w": 6, "h": 4},
+      "targets": [{
+        "expr": "sum(increase(telemetry_requests_total[10m])) by (data_type)",
+        "legendFormat": "{{data_type}}"
+      }],
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "pieType": "pie"
+      }
+    },
+    {
+      "id": 13,
+      "title": "📡 Edge Devices Active",
+      "type": "stat",
+      "gridPos": {"x": 18, "y": 24, "w": 6, "h": 4},
+      "targets": [{
+        "expr": "count(kube_pod_info{namespace=\"default\", pod=~\"edge-simulator.*\"})",
+        "legendFormat": "Edge Simulators"
+      }],
+      "options": {
+        "graphMode": "none",
+        "colorMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {"value": 0, "color": "red"},
+              {"value": 1, "color": "green"}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "id": 14,
+      "title": "⏲️ Telemetry Processing Latency (p95)",
+      "type": "graph",
+      "gridPos": {"x": 0, "y": 28, "w": 12, "h": 6},
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.95, rate(telemetry_processing_duration_seconds_bucket[5m]))",
+          "legendFormat": "p95"
+        },
+        {
+          "expr": "histogram_quantile(0.50, rate(telemetry_processing_duration_seconds_bucket[5m]))",
+          "legendFormat": "p50"
+        }
+      ],
+      "yaxes": [
+        {"format": "s", "label": "Latency"}
+      ]
+    },
+    {
+      "id": 15,
+      "title": "☁️ Storage Upload Performance",
+      "type": "graph",
+      "gridPos": {"x": 12, "y": 28, "w": 12, "h": 6},
+      "targets": [{
+        "expr": "histogram_quantile(0.95, rate(s3_upload_duration_seconds_bucket[5m]))",
+        "legendFormat": "p95 Upload Time"
+      }],
+      "yaxes": [
+        {"format": "s", "label": "Duration"}
+      ]
+    },
+    {
+      "id": 16,
+      "title": "🏎️ Race Information",
+      "type": "text",
+      "gridPos": {"x": 0, "y": 34, "w": 24, "h": 3},
+      "options": {
+        "mode": "markdown",
+        "content": "## 2024 FIA Formula One World Championship\\n### Round 1: Bahrain Grand Prix\\n**Circuit**: Bahrain International Circuit, Sakhir\\n**Laps**: 57 | **Distance**: 308.238 km\\n\\n**Live Telemetry Replay Mode** - Data from actual 2024 Bahrain GP"
+      }
+    }
+  ],
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "refresh_intervals": ["5s", "10s", "30s", "1m", "5m"]
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  }
+}

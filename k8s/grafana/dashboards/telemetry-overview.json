@@ -1,0 +1,163 @@
+{
+  "dashboard": {
+    "title": "F1 Telemetry - Overview",
+    "tags": ["f1", "telemetry", "overview"],
+    "timezone": "utc",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Telemetry Requests - Success Rate",
+        "type": "stat",
+        "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(rate(telemetry_requests_total{status=\"success\"}[5m])) / sum(rate(telemetry_requests_total[5m])) * 100",
+            "legendFormat": "Success Rate %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 90, "color": "yellow"},
+                {"value": 99, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Requests Per Second",
+        "type": "graph",
+        "gridPos": {"x": 6, "y": 0, "w": 9, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(rate(telemetry_requests_total[1m])) by (data_type)",
+            "legendFormat": "{{data_type}}"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Total Requests Today",
+        "type": "stat",
+        "gridPos": {"x": 15, "y": 0, "w": 6, "h": 4},
+        "targets": [
+          {
+            "expr": "sum(increase(telemetry_requests_total[24h]))",
+            "legendFormat": "Total"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Request Processing Duration (p95)",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 4, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(telemetry_processing_duration_seconds_bucket[5m])) by (le, data_type))",
+            "legendFormat": "p95 - {{data_type}}"
+          },
+          {
+            "expr": "histogram_quantile(0.50, sum(rate(telemetry_processing_duration_seconds_bucket[5m])) by (le, data_type))",
+            "legendFormat": "p50 - {{data_type}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Duration"}
+        ]
+      },
+      {
+        "id": 5,
+        "title": "S3 Upload Duration (p95)",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 4, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(s3_upload_duration_seconds_bucket[5m])) by (le, bucket))",
+            "legendFormat": "p95 - {{bucket}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Duration"}
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Requests by Data Type",
+        "type": "piechart",
+        "gridPos": {"x": 0, "y": 10, "w": 6, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(increase(telemetry_requests_total[1h])) by (data_type)",
+            "legendFormat": "{{data_type}}"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Error Rate",
+        "type": "graph",
+        "gridPos": {"x": 6, "y": 10, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(telemetry_requests_total{status!=\"success\"}[5m])) by (status)",
+            "legendFormat": "{{status}}"
+          }
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {"params": [10], "type": "gt"},
+              "operator": {"type": "and"},
+              "query": {"params": ["A", "5m", "now"]},
+              "reducer": {"params": [], "type": "avg"},
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "frequency": "1m",
+          "handler": 1,
+          "name": "High Error Rate",
+          "noDataState": "no_data",
+          "notifications": []
+        }
+      },
+      {
+        "id": 8,
+        "title": "Pod CPU Usage",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 16, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total{pod=~\"ingestion-service.*\"}[5m])) by (pod)",
+            "legendFormat": "{{pod}}"
+          }
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Pod Memory Usage",
+        "type": "graph",
+        "gridPos": {"x": 12, "y": 16, "w": 12, "h": 6},
+        "targets": [
+          {
+            "expr": "sum(container_memory_working_set_bytes{pod=~\"ingestion-service.*\"}) by (pod) / 1024 / 1024",
+            "legendFormat": "{{pod}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "decmbytes", "label": "Memory"}
+        ]
+      }
+    ]
+  }
+}

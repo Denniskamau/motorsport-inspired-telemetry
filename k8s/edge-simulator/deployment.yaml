@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edge-simulator
+  namespace: default
+  labels:
+    app: edge-simulator
+    version: v1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edge-simulator
+  template:
+    metadata:
+      labels:
+        app: edge-simulator
+        version: v1
+    spec:
+      containers:
+      - name: edge-simulator
+        image: <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com/f1-edge-simulator:latest
+        imagePullPolicy: Always
+        env:
+        - name: CLOUD_ENDPOINT
+          value: "http://ingestion-service.default.svc.cluster.local/api/v1/telemetry"
+        - name: COLLECTION_INTERVAL
+          value: "60"
+        - name: SIMULATE_LATENCY
+          value: "true"
+        - name: SIMULATE_PACKET_LOSS
+          value: "false"
+        - name: PACKET_LOSS_RATE
+          value: "0.05"
+        - name: EDGE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+---
+# Alternative: DaemonSet deployment for edge-like behavior
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: edge-simulator-daemonset
+  namespace: default
+  labels:
+    app: edge-simulator-daemon
+    version: v1
+spec:
+  selector:
+    matchLabels:
+      app: edge-simulator-daemon
+  template:
+    metadata:
+      labels:
+        app: edge-simulator-daemon
+        version: v1
+    spec:
+      containers:
+      - name: edge-simulator
+        image: <AWS_ACCOUNT_ID>.dkr.ecr.<AWS_REGION>.amazonaws.com/f1-edge-simulator:latest
+        imagePullPolicy: Always
+        env:
+        - name: CLOUD_ENDPOINT
+          value: "http://ingestion-service.default.svc.cluster.local/api/v1/telemetry"
+        - name: COLLECTION_INTERVAL
+          value: "60"
+        - name: SIMULATE_LATENCY
+          value: "true"
+        - name: SIMULATE_PACKET_LOSS
+          value: "true"
+        - name: PACKET_LOSS_RATE
+          value: "0.05"
+        - name: EDGE_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        resources:
+          requests:
+            cpu: 50m
+            memory: 64Mi
+          limits:
+            cpu: 100m
+            memory: 128Mi

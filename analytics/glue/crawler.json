@@ -1,0 +1,21 @@
+{
+  "Name": "f1-telemetry-raw-crawler",
+  "Role": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/f1-telemetry-<ENVIRONMENT>-glue",
+  "DatabaseName": "f1_telemetry",
+  "Description": "Crawler for raw F1 telemetry data",
+  "Targets": {
+    "S3Targets": [
+      {
+        "Path": "s3://f1-telemetry-<ENVIRONMENT>-raw-telemetry/raw-telemetry/"
+      }
+    ]
+  },
+  "SchemaChangePolicy": {
+    "UpdateBehavior": "UPDATE_IN_DATABASE",
+    "DeleteBehavior": "LOG"
+  },
+  "RecrawlPolicy": {
+    "RecrawlBehavior": "CRAWL_NEW_FOLDERS_ONLY"
+  },
+  "Schedule": "cron(0 */6 * * ? *)"
+}

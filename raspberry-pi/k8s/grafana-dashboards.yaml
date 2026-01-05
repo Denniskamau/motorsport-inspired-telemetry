@@ -1,0 +1,435 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-f1-telemetry
+  namespace: default
+  labels:
+    grafana_dashboard: "1"
+data:
+  f1-telemetry.json: |
+    {
+      "title": "F1 Telemetry - Race Weekend Dashboard",
+        "tags": ["f1", "telemetry", "motorsport"],
+        "timezone": "utc",
+        "schemaVersion": 16,
+        "version": 1,
+        "refresh": "5s",
+        "panels": [
+          {
+            "id": 1,
+            "title": "🏎️ System Status",
+            "type": "stat",
+            "gridPos": {"x": 0, "y": 0, "w": 8, "h": 4},
+            "targets": [
+              {
+                "expr": "sum(kube_pod_status_phase{namespace=\"default\", phase=\"Running\"})",
+                "legendFormat": "Running Pods"
+              }
+            ],
+            "options": {
+              "graphMode": "area",
+              "colorMode": "value"
+            },
+            "fieldConfig": {
+              "defaults": {
+                "unit": "short",
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"value": 0, "color": "red"},
+                    {"value": 3, "color": "yellow"},
+                    {"value": 5, "color": "green"}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 2,
+            "title": "📊 Telemetry Ingestion Rate",
+            "type": "graph",
+            "gridPos": {"x": 8, "y": 0, "w": 16, "h": 4},
+            "targets": [
+              {
+                "expr": "sum(rate(telemetry_requests_total{status=\"success\"}[1m]))",
+                "legendFormat": "Success"
+              },
+              {
+                "expr": "sum(rate(telemetry_requests_total{status!=\"success\"}[1m]))",
+                "legendFormat": "Errors"
+              }
+            ],
+            "yaxes": [
+              {"format": "reqps", "label": "Requests/sec"}
+            ]
+          },
+          {
+            "id": 3,
+            "title": "⛽ Pit Stop Telemetry",
+            "type": "stat",
+            "gridPos": {"x": 0, "y": 4, "w": 6, "h": 3},
+            "targets": [
+              {
+                "expr": "sum(increase(telemetry_requests_total{data_type=\"pit_stops\"}[5m]))",
+                "legendFormat": "Pit Stops"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "color": {"mode": "thresholds"},
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"value": 0, "color": "blue"}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 4,
+            "title": "🏁 Qualifying Data",
+            "type": "stat",
+            "gridPos": {"x": 6, "y": 4, "w": 6, "h": 3},
+            "targets": [
+              {
+                "expr": "sum(increase(telemetry_requests_total{data_type=\"qualifying\"}[5m]))",
+                "legendFormat": "Qualifying"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "color": {"mode": "thresholds"},
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"value": 0, "color": "purple"}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 5,
+            "title": "🏆 Race Results",
+            "type": "stat",
+            "gridPos": {"x": 12, "y": 4, "w": 6, "h": 3},
+            "targets": [
+              {
+                "expr": "sum(increase(telemetry_requests_total{data_type=\"race_results\"}[5m]))",
+                "legendFormat": "Race Results"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "color": {"mode": "thresholds"},
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"value": 0, "color": "green"}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 6,
+            "title": "✅ Success Rate",
+            "type": "gauge",
+            "gridPos": {"x": 18, "y": 4, "w": 6, "h": 3},
+            "targets": [
+              {
+                "expr": "sum(rate(telemetry_requests_total{status=\"success\"}[5m])) / sum(rate(telemetry_requests_total[5m])) * 100",
+                "legendFormat": "Success %"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "unit": "percent",
+                "min": 0,
+                "max": 100,
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"value": 0, "color": "red"},
+                    {"value": 90, "color": "yellow"},
+                    {"value": 99, "color": "green"}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 7,
+            "title": "📈 Request Latency (p95)",
+            "type": "graph",
+            "gridPos": {"x": 0, "y": 7, "w": 12, "h": 6},
+            "targets": [
+              {
+                "expr": "histogram_quantile(0.95, rate(telemetry_processing_duration_seconds_bucket[5m]))",
+                "legendFormat": "p95"
+              },
+              {
+                "expr": "histogram_quantile(0.50, rate(telemetry_processing_duration_seconds_bucket[5m]))",
+                "legendFormat": "p50"
+              }
+            ],
+            "yaxes": [
+              {"format": "s", "label": "Duration"}
+            ]
+          },
+          {
+            "id": 8,
+            "title": "☁️ S3 Upload Performance",
+            "type": "graph",
+            "gridPos": {"x": 12, "y": 7, "w": 12, "h": 6},
+            "targets": [
+              {
+                "expr": "histogram_quantile(0.95, rate(s3_upload_duration_seconds_bucket[5m]))",
+                "legendFormat": "p95 Upload Time"
+              }
+            ],
+            "yaxes": [
+              {"format": "s", "label": "Duration"}
+            ]
+          },
+          {
+            "id": 9,
+            "title": "🔄 Telemetry by Type",
+            "type": "piechart",
+            "gridPos": {"x": 0, "y": 13, "w": 8, "h": 6},
+            "targets": [
+              {
+                "expr": "sum(increase(telemetry_requests_total[1h])) by (data_type)",
+                "legendFormat": "{{data_type}}"
+              }
+            ]
+          },
+          {
+            "id": 10,
+            "title": "📡 Edge Devices Active",
+            "type": "table",
+            "gridPos": {"x": 8, "y": 13, "w": 8, "h": 6},
+            "targets": [
+              {
+                "expr": "count by (pod) (kube_pod_info{namespace=\"default\", pod=~\"edge-simulator.*\"})",
+                "format": "table",
+                "instant": true
+              }
+            ]
+          },
+          {
+            "id": 11,
+            "title": "⚡ Request Rate (Last 30min)",
+            "type": "graph",
+            "gridPos": {"x": 16, "y": 13, "w": 8, "h": 6},
+            "targets": [
+              {
+                "expr": "sum(rate(telemetry_requests_total[1m]))",
+                "legendFormat": "Total Requests/sec"
+              }
+            ],
+            "yaxes": [
+              {"format": "reqps"}
+            ]
+          }
+        ]
+    }
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-kubernetes
+  namespace: default
+  labels:
+    grafana_dashboard: "1"
+data:
+  kubernetes-cluster.json: |
+    {
+      "title": "Kubernetes Cluster - F1 Platform",
+        "tags": ["kubernetes", "cluster", "resources"],
+        "timezone": "utc",
+        "schemaVersion": 16,
+        "version": 1,
+        "refresh": "10s",
+        "panels": [
+          {
+            "id": 1,
+            "title": "🖥️ Cluster Nodes",
+            "type": "stat",
+            "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+            "targets": [
+              {
+                "expr": "count(kube_node_info)",
+                "legendFormat": "Nodes"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "color": {"mode": "thresholds"},
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"value": 0, "color": "red"},
+                    {"value": 1, "color": "yellow"},
+                    {"value": 3, "color": "green"}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 2,
+            "title": "📦 Total Pods",
+            "type": "stat",
+            "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+            "targets": [
+              {
+                "expr": "sum(kube_pod_status_phase{namespace=\"default\"})",
+                "legendFormat": "Pods"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "color": {"mode": "thresholds"},
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"value": 0, "color": "blue"}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 3,
+            "title": "✅ Running Pods",
+            "type": "stat",
+            "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
+            "targets": [
+              {
+                "expr": "sum(kube_pod_status_phase{namespace=\"default\", phase=\"Running\"})",
+                "legendFormat": "Running"
+              }
+            ],
+            "fieldConfig": {
+              "defaults": {
+                "color": {"mode": "thresholds"},
+                "thresholds": {
+                  "mode": "absolute",
+                  "steps": [
+                    {"value": 0, "color": "red"},
+                    {"value": 5, "color": "green"}
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "id": 4,
+            "title": "🔧 HPA Status",
+            "type": "stat",
+            "gridPos": {"x": 18, "y": 0, "w": 6, "h": 4},
+            "targets": [
+              {
+                "expr": "kube_horizontalpodautoscaler_status_current_replicas{namespace=\"default\"}",
+                "legendFormat": "Current Replicas"
+              }
+            ]
+          },
+          {
+            "id": 5,
+            "title": "💻 CPU Usage by Pod",
+            "type": "graph",
+            "gridPos": {"x": 0, "y": 4, "w": 12, "h": 6},
+            "targets": [
+              {
+                "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"default\", pod!=\"\"}[5m])) by (pod)",
+                "legendFormat": "{{pod}}"
+              }
+            ],
+            "yaxes": [
+              {"format": "percentunit", "label": "CPU"}
+            ]
+          },
+          {
+            "id": 6,
+            "title": "🧠 Memory Usage by Pod",
+            "type": "graph",
+            "gridPos": {"x": 12, "y": 4, "w": 12, "h": 6},
+            "targets": [
+              {
+                "expr": "sum(container_memory_working_set_bytes{namespace=\"default\", pod!=\"\"}) by (pod) / 1024 / 1024",
+                "legendFormat": "{{pod}}"
+              }
+            ],
+            "yaxes": [
+              {"format": "decmbytes", "label": "Memory"}
+            ]
+          },
+          {
+            "id": 7,
+            "title": "📊 Pod Status by Phase",
+            "type": "piechart",
+            "gridPos": {"x": 0, "y": 10, "w": 8, "h": 6},
+            "targets": [
+              {
+                "expr": "sum(kube_pod_status_phase{namespace=\"default\"}) by (phase)",
+                "legendFormat": "{{phase}}"
+              }
+            ]
+          },
+          {
+            "id": 8,
+            "title": "🔄 Pod Restarts (Last Hour)",
+            "type": "table",
+            "gridPos": {"x": 8, "y": 10, "w": 8, "h": 6},
+            "targets": [
+              {
+                "expr": "sum(increase(kube_pod_container_status_restarts_total{namespace=\"default\"}[1h])) by (pod)",
+                "format": "table",
+                "instant": true
+              }
+            ]
+          },
+          {
+            "id": 9,
+            "title": "⚖️ HPA Target vs Current",
+            "type": "graph",
+            "gridPos": {"x": 16, "y": 10, "w": 8, "h": 6},
+            "targets": [
+              {
+                "expr": "kube_horizontalpodautoscaler_status_current_replicas{namespace=\"default\"}",
+                "legendFormat": "Current"
+              },
+              {
+                "expr": "kube_horizontalpodautoscaler_spec_max_replicas{namespace=\"default\"}",
+                "legendFormat": "Max"
+              },
+              {
+                "expr": "kube_horizontalpodautoscaler_spec_min_replicas{namespace=\"default\"}",
+                "legendFormat": "Min"
+              }
+            ]
+          },
+          {
+            "id": 10,
+            "title": "🌐 Network I/O by Pod",
+            "type": "graph",
+            "gridPos": {"x": 0, "y": 16, "w": 24, "h": 6},
+            "targets": [
+              {
+                "expr": "sum(rate(container_network_receive_bytes_total{namespace=\"default\"}[5m])) by (pod)",
+                "legendFormat": "RX {{pod}}"
+              },
+              {
+                "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"default\"}[5m])) by (pod)",
+                "legendFormat": "TX {{pod}}"
+              }
+            ],
+            "yaxes": [
+              {"format": "Bps", "label": "Network"}
+            ]
+          }
+        ]
+    }

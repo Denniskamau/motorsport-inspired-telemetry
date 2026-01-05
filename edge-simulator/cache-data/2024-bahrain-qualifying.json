@@ -1,0 +1,19 @@
+{
+  "MRData": {
+    "xmlns": "http://ergast.com/mrd/1.5",
+    "series": "f1",
+    "url": "http://ergast.com/api/f1/2024/1/qualifying.json",
+    "RaceTable": {
+      "season": "2024",
+      "round": "1",
+      "Races": [{
+        "raceName": "Bahrain Grand Prix",
+        "date": "2024-03-02",
+        "QualifyingResults": [
+          {"position": "1", "Driver": {"code": "VER", "givenName": "Max", "familyName": "Verstappen"}, "Q3": "1:28.997"},
+          {"position": "2", "Driver": {"code": "PER", "givenName": "Sergio", "familyName": "Pérez"}, "Q3": "1:29.145"}
+        ]
+      }]
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "MRData": {
+    "xmlns": "http://ergast.com/mrd/1.5",
+    "series": "f1",
+    "url": "http://ergast.com/api/f1/2024/1/pitstops.json",
+    "RaceTable": {
+      "season": "2024",
+      "round": "1",
+      "Races": [{
+        "raceName": "Bahrain Grand Prix",
+        "date": "2024-03-02",
+        "PitStops": [
+          {"driverId": "max_verstappen", "lap": "17", "stop": "1", "time": "14:23:45.678", "duration": "2.456", "tyreCompound": "HARD", "fromCompound": "MEDIUM"},
+          {"driverId": "perez", "lap": "18", "stop": "1", "time": "14:25:12.890", "duration": "2.512", "tyreCompound": "HARD", "fromCompound": "MEDIUM"},
+          {"driverId": "sainz", "lap": "19", "stop": "1", "time": "14:26:34.123", "duration": "2.489", "tyreCompound": "HARD", "fromCompound": "MEDIUM"},
+          {"driverId": "leclerc", "lap": "20", "stop": "1", "time": "14:28:01.456", "duration": "2.678", "tyreCompound": "HARD", "fromCompound": "MEDIUM"},
+          {"driverId": "norris", "lap": "22", "stop": "1", "time": "14:32:15.789", "duration": "2.534", "tyreCompound": "HARD", "fromCompound": "MEDIUM"},
+          {"driverId": "max_verstappen", "lap": "38", "stop": "2", "time": "15:12:23.456", "duration": "2.389", "tyreCompound": "MEDIUM", "fromCompound": "HARD"},
+          {"driverId": "perez", "lap": "39", "stop": "2", "time": "15:13:45.678", "duration": "2.423", "tyreCompound": "MEDIUM", "fromCompound": "HARD"},
+          {"driverId": "sainz", "lap": "40", "stop": "2", "time": "15:15:12.890", "duration": "2.467", "tyreCompound": "MEDIUM", "fromCompound": "HARD"},
+          {"driverId": "leclerc", "lap": "41", "stop": "2", "time": "15:16:34.123", "duration": "2.501", "tyreCompound": "MEDIUM", "fromCompound": "HARD"},
+          {"driverId": "norris", "lap": "42", "stop": "2", "time": "15:18:01.456", "duration": "2.556", "tyreCompound": "SOFT", "fromCompound": "HARD"}
+        ]
+      }]
+    }
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "MRData": {
+    "xmlns": "http://ergast.com/mrd/1.5",
+    "series": "f1",
+    "url": "http://ergast.com/api/f1/2024/1/constructorStandings.json",
+    "StandingsTable": {
+      "season": "2024",
+      "round": "1",
+      "StandingsLists": [{
+        "season": "2024",
+        "round": "1",
+        "ConstructorStandings": [
+          {
+            "position": "1",
+            "positionText": "1",
+            "points": "43",
+            "wins": "1",
+            "Constructor": {
+              "constructorId": "red_bull",
+              "name": "Red Bull Racing",
+              "nationality": "Austrian"
+            }
+          },
+          {
+            "position": "2",
+            "positionText": "2",
+            "points": "27",
+            "wins": "0",
+            "Constructor": {
+              "constructorId": "ferrari",
+              "name": "Ferrari",
+              "nationality": "Italian"
+            }
+          },
+          {
+            "position": "3",
+            "positionText": "3",
+            "points": "10",
+            "wins": "0",
+            "Constructor": {
+              "constructorId": "mclaren",
+              "name": "McLaren",
+              "nationality": "British"
+            }
+          },
+          {
+            "position": "4",
+            "positionText": "4",
+            "points": "8",
+            "wins": "0",
+            "Constructor": {
+              "constructorId": "mercedes",
+              "name": "Mercedes",
+              "nationality": "German"
+            }
+          },
+          {
+            "position": "5",
+            "positionText": "5",
+            "points": "4",
+            "wins": "0",
+            "Constructor": {
+              "constructorId": "aston_martin",
+              "name": "Aston Martin",
+              "nationality": "British"
+            }
+          }
+        ]
+      }]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+# Cloudflare Tunnel Configuration Template
+# Copy this to /etc/cloudflared/config.yml on your Raspberry Pi
+# Replace TUNNEL_ID with your actual tunnel ID from: cloudflared tunnel create f1-telemetry
+# Replace yourdomain.com with your actual domain
+
+tunnel: TUNNEL_ID
+credentials-file: /home/pi/.cloudflared/TUNNEL_ID.json
+
+# Ingress rules (top to bottom priority)
+ingress:
+  # Main Grafana dashboard - Public access
+  - hostname: f1-telemetry.yourdomain.com
+    service: http://localhost:30030
+    originRequest:
+      noTLSVerify: true
+
+  # Prometheus metrics - Optional, can comment out for security
+  - hostname: prometheus.f1-telemetry.yourdomain.com
+    service: http://localhost:30090
+    originRequest:
+      noTLSVerify: true
+
+  # MinIO console - Optional, can comment out for security
+  - hostname: minio.f1-telemetry.yourdomain.com
+    service: http://localhost:30901
+    originRequest:
+      noTLSVerify: true
+
+  # Catch-all rule (required)
+  - service: http_status:404
+
+# Optional: Configure logging
+# loglevel: info
+# logfile: /var/log/cloudflared.log
+
+# Optional: Metrics for monitoring tunnel health
+# metrics: localhost:2000
