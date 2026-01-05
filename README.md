@@ -23,7 +23,7 @@ This project simulates a real-world F1 telemetry system that collects data from 
 
 ### Why This Project?
 
-Built specifically for **Toyota Gazoo Racing Europe - AWS Cloud Engineer** role, this project demonstrates:
+Built specifically to demonstrates:
 
 ✅ Hybrid thinking (edge → cloud)
 ✅ Race-weekend reliability mindset
@@ -337,106 +337,6 @@ kubectl apply -f k8s/edge-simulator/
 - **Kubernetes**: GitOps-style deployments
 - **Testing**: (Future) Integration and E2E tests
 
-## 🎬 Demo for Recruitment
-
-### Screen Recording Tips
-
-1. **Start with Overview** (1-2 min)
-   - Explain the project goal
-   - Show architecture diagram
-   - Relate to real F1 operations
-
-2. **Local Demo** (5-7 min)
-   - Run `./setup.sh` (time-lapse if needed)
-   - Show running pods: `kubectl get pods`
-   - Demonstrate data flow with logs
-   - Show Prometheus metrics
-   - Navigate Grafana dashboard
-   - Show data in MinIO
-   - Demonstrate auto-scaling: `kubectl get hpa`
-
-3. **Code Walkthrough** (3-5 min)
-   - Terraform modules (VPC, EKS, IAM)
-   - Kubernetes manifests (HPA, PDB)
-   - Python services (ingestion, simulator)
-   - CI/CD workflows
-
-4. **Race Weekend Operations** (2-3 min)
-   - Explain infrastructure freeze
-   - Show scaling procedures
-   - Discuss monitoring strategy
-   - Explain failure scenarios and mitigation
-
-### Talking Points
-
-**Technical Skills:**
-- "This demonstrates hybrid edge-to-cloud architecture similar to what you'd use during race weekends"
-- "The infrastructure is defined as code using Terraform, with separate modules for reusability"
-- "I'm using IRSA for security - no static credentials stored anywhere"
-- "The HPA and PDB ensure high availability even during node failures"
-- "Data is partitioned in S3 for efficient Athena queries"
-
-**Motorsport Context:**
-- "During a race weekend, you'd scale up before qualifying and maintain capacity"
-- "The PDB ensures you always have minimum pods running - critical for live events"
-- "Metrics are exported to Prometheus for real-time monitoring during races"
-- "The edge simulator represents trackside systems with realistic network conditions"
-
-## 📊 Performance & Scale
-
-### Current Configuration (Local)
-
-- **Cluster**: 3 nodes (1 control-plane, 2 workers)
-- **Ingestion Service**: 2-5 replicas (auto-scaling)
-- **Resources**: ~1 CPU, ~2GB RAM total
-- **Data Rate**: Simulated F1 API calls every 30s
-
-### Production Configuration (AWS)
-
-- **Cluster**: 1-5 t3.large nodes (auto-scaling)
-- **Ingestion Service**: 2-10 replicas (HPA)
-- **Expected Load**: 100+ requests/second
-- **Storage**: S3 with lifecycle to Glacier after 90 days
-- **Cost**: ~$200-400/month (estimate)
-
-## 🧪 Testing
-
-### Local Testing
-
-```bash
-# Test health endpoint
-curl http://localhost:30080/health
-
-# Test metrics
-curl http://localhost:30080/metrics
-
-# Manual telemetry test
-./local-dev/scripts/test-ingestion.sh
-
-# View data in MinIO
-docker exec f1-minio mc ls myminio/f1-telemetry-raw/raw-telemetry/ --recursive
-```
-
-### Load Testing
-
-```bash
-# Scale up edge simulators
-kubectl scale deployment edge-simulator --replicas=5
-
-# Watch HPA respond
-watch kubectl get hpa
-
-# Monitor metrics
-kubectl top pods
-```
-
-## 📚 Documentation
-
-- [Local Development Guide](local-dev/README.md) - Run locally with kind
-- [Terraform Guide](terraform/README.md) - AWS infrastructure deployment
-- [Kubernetes Guide](k8s/README.md) - K8s manifests and operations
-- [Analytics Guide](analytics/README.md) - Glue and Athena setup
-- [CI/CD Guide](.github/workflows/README.md) - GitHub Actions pipelines
 
 ## 🎓 Learning Resources
 
@@ -468,10 +368,10 @@ MIT License - See [LICENSE](LICENSE) file for details
 
 ## 📧 Contact
 
-**Dennis** - [Your LinkedIn] | [Your Email]
+**Dennis** -  denniskamau3@gmail.com
 
 Portfolio: [Your Website]
-GitHub: [@YourGitHub](https://github.com/your-username)
+GitHub: [@YourGitHub](https://github.com/Denniskamau)
 
 ---
 

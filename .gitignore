@@ -77,4 +77,5 @@ temp/
 
 # Documentation - ignore all markdown files except README.md
 *.md
+*.MD
 !README.md
