@@ -1,0 +1,45 @@
+# Cloudflare Tunnel Configuration for F1 Telemetry Platform
+# Domain: telemetry.shiftup-dev.com
+
+# This will be updated with your tunnel ID after creation
+tunnel: TUNNEL_ID_PLACEHOLDER
+credentials-file: /Users/dennis/.cloudflared/TUNNEL_ID_PLACEHOLDER.json
+
+# Ingress rules (processed top to bottom)
+ingress:
+  # Main Grafana dashboard - Primary interface
+  - hostname: telemetry.shiftup-dev.com
+    service: http://localhost:30030
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+
+  # Prometheus with predefined queries
+  - hostname: prometheus.shiftup-dev.com
+    service: http://localhost:30090
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+
+  # MinIO console (optional - can be restricted)
+  - hostname: minio.shiftup-dev.com
+    service: http://localhost:30901
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+
+  # Ingestion API (optional - for direct telemetry submission)
+  - hostname: api.shiftup-dev.com
+    service: http://localhost:30080
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+
+  # Catch-all rule (required as last entry)
+  - service: http_status:404
+
+# Optional: Configure logging
+# loglevel: info
+
+# Optional: Enable metrics endpoint for monitoring
+# metrics: localhost:2000
